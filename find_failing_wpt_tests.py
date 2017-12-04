@@ -12,11 +12,12 @@ file = open('testing/web-platform/meta/failing_wpt_tests.txt','w+')
 workbook = xlsxwriter.Workbook('testing/web-platform/meta/failing_wpt_tests.xlsx')
 bold = workbook.add_format({'bold': True})
 for dirName, subdirList, fileList in os.walk(rootDir):
-	if any(x in dirName for x in requiredSubdirList):
+	midtemp = dirName
+	if midtemp.replace('testing/web-platform/meta/','') in requiredSubdirList:
 		for fname in fileList:
 			if '.ini' in fname:
 				if dirName != temp:
-					print('\t%s\n' % (dirName.replace('testing/web-platform/meta/','')))
+					#print('\t%s\n' % (dirName.replace('testing/web-platform/meta/','')))
 					tempdir = dirName.replace('testing/web-platform/meta/','')
 					try:
 						if(tempdir.index('/')):
@@ -34,7 +35,7 @@ for dirName, subdirList, fileList in os.walk(rootDir):
 					temp = dirName
 					tempmult = tempdir
 				count+=1
-				print('\t%s/%s' % (dirName,fname))
+				#print('\t%s/%s' % (dirName,fname))
 				file.write('%s,%s/%s\n' % (fname,dirName,fname))
 				worksheet.write(row,col,count)
 				worksheet.write(row,col+1,fname)

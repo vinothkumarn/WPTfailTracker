@@ -10,11 +10,11 @@ def findFailingTests(rootDir ,worksheet):
 	tempmult = ""
 	for dirName, subdirList, fileList in os.walk(rootDir):
 		for fname in fileList:
-			if '.ini' in fname:
+			if '.ini' in fname and fname != '__dir__.ini':
 				count+=1
 				worksheet.write(row,col,count)
 				worksheet.write(row,col+1,fname)
-				worksheet.write(row,col+2,dirName.strip(expanduser("~")))
+				#worksheet.write(row,col+2,dirName.strip(expanduser("~")))
 				row+=1
 	return count
 
@@ -38,9 +38,8 @@ for dirName, subdirList, fileList in os.walk(rootDir,workbook):
 	if midtemp.replace(rootDir,'') in requiredSubdirList:
 		testcount = findCountofTests(dirName)
 		worksheet = workbook.add_worksheet(midtemp.replace(rootDir,''))
-		worksheet.write(0,0,midtemp.replace(rootDir,''),bold)
 		failcount = findFailingTests(dirName,worksheet)
-		worksheet.write(0,1,'(failing '+str(failcount)+'/total '+str(testcount)+')',bold)
+		worksheet.write(0,0,midtemp.replace(rootDir,'')+'(failing '+str(failcount)+'/total '+str(testcount)+')',bold)
 workbook.close()
 
 

@@ -26,9 +26,25 @@ def findCountofTests(rootDir):
 			if '.html' in fname or '.htm' in fname:
 				count+=1
 	return count
+
 home = expanduser("~")
 rootDir = home+'/src/mozilla-central/testing/web-platform/meta/'
-requiredSubdirList = ['content-security-policy','mixed-content','subresource-integrity','cors','x-frame-options','referrer-policy','webauthn','feature-policy','credential-management']
+requiredSubdirList = [
+	'cookies',
+	'clear-site-data',
+	'content-security-policy',
+	'cors',
+	'credential-management'
+	'feature-policy',
+	'fetch',
+	'mixed-content',
+	'mimesniff',
+	'referrer-policy',
+	'subresource-integrity',
+	'webauthn',
+	'x-frame-options',
+]
+
 workbook = xlsxwriter.Workbook('failing_wpt_tests.xlsx')
 bold = workbook.add_format({'bold': True})
 for dirName, subdirList, fileList in os.walk(rootDir,workbook):

@@ -4,7 +4,7 @@ from os.path import expanduser
 
 def findFailingTests(rootDir ,worksheet):
 	count = 0
-	row = 1
+	row = 2
 	col = 0
 	temp = ""
 	tempmult = ""
@@ -47,15 +47,31 @@ requiredSubdirList = [
 
 workbook = xlsxwriter.Workbook('failing_wpt_tests.xlsx')
 bold = workbook.add_format({'bold': True})
+overviewsheet = workbook.add_worksheet('Overview')
+overviewsheet.write(0, 0, 'Testname', bold)
+overviewsheet.write(0, 1, 'Tests', bold)
+overviewsheet.write(0, 2, 'Failures', bold)
+overviewsheet.write(0, 3, 'Percentage', bold)
+row = 0
 for dirName, subdirList, fileList in os.walk(rootDir,workbook):
-	midtemp = dirName
+	testdir = dirName.replace(rootDir, '')
 	testcount = 0
 	failcount = 0
-	if midtemp.replace(rootDir,'') in requiredSubdirList:
+	if testdir in requiredSubdirList:
+		row += 1
 		testcount = findCountofTests(dirName)
-		worksheet = workbook.add_worksheet(midtemp.replace(rootDir,''))
-		failcount = findFailingTests(dirName,worksheet)
-		worksheet.write(0,0,midtemp.replace(rootDir,'')+'(failing '+str(failcount)+'/total '+str(testcount)+')',bold)
+		worksheet = workbook.add_worksheet(testdir.replace(rootDir,''))
+		failcount = findFailingTests(dirName, worksheet)
+		worksheet.write(0, 0, 'Testname', bold)
+		worksheet.write(0, 1, 'Tests', bold)
+		worksheet.write(0, 2, 'Failures', bold)
+		worksheet.write(1, 0, testdir)
+		worksheet.write(1, 1, testcount)
+		worksheet.write(1, 2, failcount)
+		overviewsheet.write(row, 0, testdir)
+		overviewsheet.write(row, 1, testcount)
+		overviewsheet.write(row, 2, failcount)
+		print testdir, testcount, failcount
 workbook.close()
 
 
